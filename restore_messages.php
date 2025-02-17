@@ -29,13 +29,17 @@ function getLoggedChanges() {
     return $changes;
 }
 
+$groupId = $_GET['group_id'] ?? null;
 $changes = getLoggedChanges();
 $groupedChanges = [];
 
-foreach ($changes as $change) {
-    $groupedChanges[$change['group_id']][] = $change;
+if ($groupId !== null) {
+    foreach ($changes as $change) {
+        if ($change['group_id'] == $groupId) {
+            $groupedChanges[] = $change;
+        }
+    }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -62,10 +66,10 @@ foreach ($changes as $change) {
     </nav>
     <div class="container mt-5">
         <h2 class="text-center">Restaurer les Messages</h2>
-        <?php foreach ($groupedChanges as $groupId => $changes): ?>
+        <?php if (!empty($groupedChanges)): ?>
             <h4>Groupe ID: <?= htmlspecialchars($groupId) ?></h4>
             <ul class="list-group mb-3">
-                <?php foreach ($changes as $change): ?>
+                <?php foreach ($groupedChanges as $change): ?>
                     <li class="list-group-item">
                         <strong>Action:</strong> <?= htmlspecialchars($change['action']) ?><br>
                         <strong>Timestamp:</strong> <?= htmlspecialchars($change['timestamp']) ?><br>
@@ -75,7 +79,9 @@ foreach ($changes as $change) {
                     </li>
                 <?php endforeach; ?>
             </ul>
-        <?php endforeach; ?>
+        <?php else: ?>
+            <p>Aucun message trouvé pour ce groupe.</p>
+        <?php endif; ?>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>

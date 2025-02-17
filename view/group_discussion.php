@@ -138,7 +138,7 @@ if (!$groupDetails) {
         ?>
         <div class="text-right mb-3">
             <a href="add_member.php?group_id=<?= $groupId ?>" class="btn btn-secondary">Ajouter un Membre</a>
-            <a href="../restore_messages.php" class="btn btn-info">Restaurer les Messages</a>
+            <a href="../restore_messages.php?group_id=<?= $groupId ?>" class="btn btn-info">Restaurer les Messages</a>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
