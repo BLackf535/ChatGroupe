@@ -13,16 +13,17 @@ if (isset($_GET['message_id']) && isset($_GET['group_id'])) {
 
     $controller = new Controller();
     $originalContent = $controller->getMessageById($messageId)['content'];
+    $userId = $_SESSION['user_id'];
     $controller->deleteMessage($messageId);
 
     // Log the deletion in an XML file
-    logMessageChange($messageId, 'delete', $originalContent, $groupId);
+    logMessageChange($messageId, 'delete', $originalContent, $groupId, $userId);
 
     header('Location: view/group_discussion.php?group_id=' . $groupId);
     exit;
 }
 
-function logMessageChange($messageId, $action, $content, $groupId) {
+function logMessageChange($messageId, $action, $content, $groupId, $userId) {
     $xml = new DOMDocument('1.0', 'UTF-8');
     $xml->formatOutput = true;
 
@@ -41,6 +42,7 @@ function logMessageChange($messageId, $action, $content, $groupId) {
     $change->setAttribute('action', $action);
     $change->setAttribute('timestamp', date('Y-m-d H:i:s'));
     $change->setAttribute('group_id', $groupId);
+    $change->setAttribute('user_id', $userId);
 
     // Ajouter le contenu avant suppression
     $change->setAttribute('original_content', htmlspecialchars($content));

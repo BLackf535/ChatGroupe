@@ -19,13 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $controller->editMessage($messageId, $newContent, $title, $authorId, $groupId);
 
     // Log the modification in an XML file
-    logMessageChange($messageId, 'edit', $originalContent, $newContent, $groupId);
+    logMessageChange($messageId, 'edit', $originalContent, $newContent, $groupId, $authorId);
 
     header('Location: view/group_discussion.php?group_id=' . $groupId);
     exit;
 }
 
-function logMessageChange($messageId, $action, $originalContent, $newContent, $groupId) {
+function logMessageChange($messageId, $action, $originalContent, $newContent, $groupId, $userId) {
     $xml = new DOMDocument('1.0', 'UTF-8');
     $xml->formatOutput = true;
 
@@ -44,6 +44,7 @@ function logMessageChange($messageId, $action, $originalContent, $newContent, $g
     $change->setAttribute('action', $action);
     $change->setAttribute('timestamp', date('Y-m-d H:i:s'));
     $change->setAttribute('group_id', $groupId);
+    $change->setAttribute('user_id', $userId);
 
     // Ajouter le contenu avant modification
     $change->setAttribute('original_content', htmlspecialchars($originalContent));

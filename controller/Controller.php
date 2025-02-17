@@ -145,7 +145,7 @@ class Controller {
         return true;
     }
 
-    public function editMessage($messageId, $newContent, $title = 'Untitled', $authorId = 0, $groupId) {
+    public function editMessage($messageId, $newContent, $groupId, $title = 'Untitled', $authorId = 0) {
         // Check if the message exists
         $stmt = $this->model->getDB()->prepare("SELECT COUNT(*) FROM news WHERE id = :message_id");
         $stmt->bindParam(':message_id', $messageId);

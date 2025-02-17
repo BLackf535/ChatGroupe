@@ -20,6 +20,7 @@ function getLoggedChanges() {
                 'action' => (string)$change['action'],
                 'timestamp' => (string)$change['timestamp'],
                 'group_id' => (string)$change['group_id'],
+                'user_id' => (string)$change['user_id'],
                 'original_content' => (string)$change['original_content'],
                 'content' => (string)$change->content
             ];
@@ -31,15 +32,21 @@ function getLoggedChanges() {
 
 $groupId = $_GET['group_id'] ?? null;
 $changes = getLoggedChanges();
+$filteredChanges = array_filter($changes, function($change) {
+    return !empty($change['group_id']) && !empty($change['user_id']);
+});
+// echo '<pre>'; print_r($filteredChanges); echo '</pre>';
 $groupedChanges = [];
+$userId = $_SESSION['user_id'];
 
 if ($groupId !== null) {
-    foreach ($changes as $change) {
-        if ($change['group_id'] == $groupId) {
+    foreach ($filteredChanges as $change) {
+        if ($change['group_id'] == $groupId && $change['user_id'] == $userId) {
             $groupedChanges[] = $change;
         }
     }
 }
+// echo '<pre>'; print_r($groupedChanges); echo '</pre>';
 ?>
 <!DOCTYPE html>
 <html lang="fr">

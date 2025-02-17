@@ -17,7 +17,7 @@ if (isset($_GET['message_id'])) {
         $title = 'Untitled';  // Default title
         $authorId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;  // Use logged-in user's ID
         $groupId = $_GET['group_id'];
-        $controller->editMessage($messageId, $content, $title, $authorId, $groupId);
+        $controller->editMessage($messageId, $content, $groupId, $title, $authorId);
     }
 
     header('Location: view/group_discussion.php?group_id=' . $_GET['group_id']);
